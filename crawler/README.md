@@ -2,9 +2,12 @@
 https://scrapy.org/
 
 1) Installation
-pip install Scrapy
+```bash
+$ pip install Scrapy
+```
 
 3) Scrapy at a glance
+```bash
 $ cd example
 $ scrapy runspider quotes_spider.py -o quotes.json
-
+```
