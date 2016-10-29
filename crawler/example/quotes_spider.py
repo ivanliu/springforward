@@ -1,6 +1,7 @@
-'''
-Here’s the code for a spider that scrapes famous quotes from website http://quotes.toscrape.com
-'''
+"""
+Here's the code for a spider that scrapes famous quotes from website http://quotes.toscrape.com
+"""
+
 import scrapy
 
 class QuotesSpider(scrapy.Spider):
