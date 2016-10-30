@@ -5,7 +5,7 @@ import urlparse
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 
-from crawler.items import InvestorItem, StockItem, ActivityItem
+from datafetch.items import InvestorItem, StockItem, ActivityItem
 
 class DataromaSpider(CrawlSpider):
     '''

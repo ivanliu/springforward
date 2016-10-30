@@ -10,14 +10,14 @@
 
 BOT_NAME = 'springforward'
 
-SPIDER_MODULES = ['crawler.spiders']
+SPIDER_MODULES = ['datafetch.spiders']
 # NEWSPIDER_MODULE = 'springforward.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'springforward (+http://www.yourdomain.com)'
 
 ITEM_PIPELINES = {
-    'crawler.pipelines.MultiCSVItemPipeline': 300,
+    'datafetch.pipelines.MultiCSVItemPipeline': 300,
 }
 
 # The amount of time (in secs) that the downloader should wait before downloading 

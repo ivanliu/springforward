@@ -10,7 +10,7 @@ from pydispatch import dispatcher
 from scrapy import signals
 from scrapy.exporters import CsvItemExporter
 
-CSVDir = 'crawler/data/'
+CSVDir = 'datafetch/data/'
 
 def item_type(item):
     return type(item).__name__.replace('Item','').lower()  # InvestorItem => team
