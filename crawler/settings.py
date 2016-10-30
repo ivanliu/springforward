@@ -10,18 +10,18 @@
 
 BOT_NAME = 'springforward'
 
-SPIDER_MODULES = ['springforward.spiders']
-NEWSPIDER_MODULE = 'springforward.spiders'
+SPIDER_MODULES = ['crawler.spiders']
+# NEWSPIDER_MODULE = 'springforward.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'springforward (+http://www.yourdomain.com)'
 
-#ITEM_PIPELINES = {
-#        'springforward.pipelines.MySQLStorePipeline': 300,
-#        }
+ITEM_PIPELINES = {
+    'crawler.pipelines.MultiCSVItemPipeline': 300,
+}
 
 # The amount of time (in secs) that the downloader should wait before downloading 
 # consecutive pages from the same website. This can be used to throttle the crawling 
 # speed to avoid hitting servers too hard. 
-DOWNLOAD_DELAY = 0.25    # 250 ms of delay
+DOWNLOAD_DELAY = 0.025    # 25 ms of delay
 

@@ -2,8 +2,10 @@ import re
 import scrapy
 import urlparse
 
-from scrapy.contrib.spiders import CrawlSpider, Rule
-from scrapy.contrib.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
+
+from crawler.items import InvestorItem, StockItem, ActivityItem
 
 class DataromaSpider(CrawlSpider):
     '''
@@ -36,12 +38,14 @@ class DataromaSpider(CrawlSpider):
             val = row.xpath('td[@class="val"]/text()').extract_first().strip()
             cnt = row.xpath('td[@class="cnt"]/text()').extract_first().strip()
             code = link.split('=')[1].strip()
-            yield {
-                    'investor_code': code,
-                    'investor': name,
-                    'value': val,
-                    'count': cnt
-            }
+
+            # yield investor
+            investor_item = InvestorItem()
+            investor_item['investor_code'] = code
+            investor_item['investor_name'] = name
+            investor_item['value'] = val
+            investor_item['count'] = cnt
+            yield investor_item
 
             if link:
                 link = response.urljoin(link)
@@ -68,16 +72,18 @@ class DataromaSpider(CrawlSpider):
         # parse response url to get codes for investor and stock
         parsed = urlparse.urlparse(response.url)
         kvs = urlparse.parse_qs(parsed.query)
-        stock_code = kvs['sym'][0]
+        code = kvs['sym'][0]
 
         # get stock name and sector from the page
         name = response.xpath('/html/body/div/div[@id="main"]/div[@id="b1"]/p[@id="st_name"]/text()').extract_first().strip()
         sector = response.xpath('/html/body/div/div[@id="main"]/div[@id="b1"]/table/tr[1]/td[2]/b/text()').extract_first().strip()
-        yield {
-                'stock_code': stock_code,
-                'name': name,
-                'sector': sector
-        }
+
+        # yield stock
+        stock_item = StockItem()
+        stock_item['stock_code'] = code
+        stock_item['stock_name'] = name
+        stock_item['sector'] = sector
+        yield stock_item
 
     def parse_activities(self, response):
         '''
@@ -111,14 +117,15 @@ class DataromaSpider(CrawlSpider):
             change_to_portfolio_percent = cells[4].css('td::text').extract_first()
             price = cells[5].css('td::text').extract_first()
 
-            yield {
-                    'investor_code': investor_code,
-                    'stock_code': stock_code,
-                    'period': re.sub(r"\s+&nbsp\s+", " ", period),
-                    'share': shares.strip() if shares else "",
-                    'portfolio_percent': portfolio_percent.strip() if portfolio_percent else "",
-                    'activity': activity.strip() if activity else "",
-                    'change_to_portfolio_percent': change_to_portfolio_percent.strip() if change_to_portfolio_percent else "",
-                    'price': price.strip() if price else ""
-            }
+            # yield activity
+            activity_item = ActivityItem()
+            activity_item['investor_code'] = investor_code
+            activity_item['stock_code'] = stock_code
+            activity_item['period'] = re.sub(r"\s+&nbsp\s+", " ", period)
+            activity_item['shares'] = shares.strip() if shares else ""
+            activity_item['portfolio_percent'] = portfolio_percent.strip() if portfolio_percent else ""
+            activity_item['activity'] = activity.strip() if activity else ""
+            activity_item['change_to_portfolio_percent'] = change_to_portfolio_percent.strip() if change_to_portfolio_percent else ""
+            activity_item['price'] = price.strip() if price else ""
+            yield activity_item
 
